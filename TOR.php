@@ -5,10 +5,10 @@ namespace NoLibForIt\TOR;
 /**
   *  env vars & default values
   **/
-define('TOR_HOST',       getenv('TOR_HOST')       ?: 'localhost'             );
-define('TOR_PORT',       getenv('TOR_PORT')       ?: 9050                    );
-define('TOR_CTL_PORT',   getenv('TOR_CTL_PORT')   ?: 9051                    );
-define('TOR_CTL_SECRET', getenv('TOR_CTL_SECRET') ?: '/run/secret//torpass'  );
+define('TOR_HOST',       getenv('TOR_HOST')       ?: 'localhost'           );
+define('TOR_PORT',       getenv('TOR_PORT')       ?: 9050                  );
+define('TOR_CTL_PORT',   getenv('TOR_CTL_PORT')   ?: 9051                  );
+define('TOR_CTL_SECRET', getenv('TOR_CTL_SECRET') ?: '/run/secret/torpass' );
 
 class TOR {
 
@@ -55,13 +55,12 @@ class TOR {
     $pass = @file_get_contents(TOR_CTL_SECRET);
     if( $pass ) {
       $pass = trim($pass);
-    }
-
-    fwrite($ctlSocket, "AUTHENTICATE \"$pass\"\r\n");
-    $status = trim(fgets($ctlSocket));
-    if( $status != "250 OK" ) {
-      error_log("[".__CLASS__."] ".TOR_HOST.":".TOR_CTL_PORT." authentication failed.");
-      return false;
+      fwrite($ctlSocket, "AUTHENTICATE \"$pass\"\r\n");
+      $status = trim(fgets($ctlSocket));
+      if( $status != "250 OK" ) {
+        error_log("[".__CLASS__."] ".TOR_HOST.":".TOR_CTL_PORT." authentication failed.");
+        return false;
+      }
     }
 
     fwrite($ctlSocket,"signal NEWNYM\r\n");
