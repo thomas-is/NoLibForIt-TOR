@@ -33,7 +33,7 @@ class TOR {
     fwrite( $socket, pack("C5", 0x05 , 0x01 , 0x00 , 0x03, strlen($host)) . $host . pack("n", $port) );
     $buffer = fread($socket,32);
     if ( $buffer != pack("C10", 0x05, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ) ) {
-      error_log("[".__CLASS__."] ".TOR_HOST.":".TOR_PORT." connection failed.");
+      error_log("[".__CLASS__."] ".TOR_HOST.":".TOR_PORT." connection to $host:$port failed.");
       return false;
     }
 
